@@ -2,14 +2,14 @@ html,
 body {
   width: 100vw;
   height: 100vh;
-  /* background-color: #f3eeee; */
 }
 
 header {
   text-align: center;
   margin: 7%;
-  padding: 3%;
+  padding: 2%;
   background-color: #eef3ed;
+  cursor: pointer;
 }
 
 ul {
@@ -31,7 +31,7 @@ li {
   border: 3px dashed #a48bbe;
   border-radius: 10px;
 }
-.Editor {
+.editor {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -90,6 +90,7 @@ div {
 }
 .documentTitle:hover {
   background-color: #c29243;
+  user-select: none;
 }
 
 .toggleBtn {

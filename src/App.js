@@ -11,7 +11,7 @@ export default function App({ $target, username }) {
   $target.appendChild($sidebarContainer);
   $target.appendChild($postContainer);
 
-  const postPage = new SidebarPage({ $target: $sidebarContainer, username });
+  const sidebarPage = new SidebarPage({ $target: $sidebarContainer, username });
 
   const postEditPage = new PostEditPage({
     $target: $postContainer,
@@ -22,16 +22,14 @@ export default function App({ $target, username }) {
   });
 
   this.route = () => {
-    // $sidebarContainer.innerHTML = "";
-    // $postContainer.innerHTML = "";
     const { pathname } = window.location;
-    postPage.setState();
+    sidebarPage.setState();
 
     if (pathname === "/") {
       postEditPage.setState({ id: "root" });
     } else {
-      const [, id] = pathname.split("/");
-      postEditPage.setState({ id: id }); // test id { id: 75417 }
+      const [, , id] = pathname.split("/");
+      postEditPage.setState({ id: id });
     }
   };
 

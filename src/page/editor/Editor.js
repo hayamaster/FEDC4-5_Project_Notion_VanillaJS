@@ -11,7 +11,7 @@ export default function Editor({
   onEditing,
 }) {
   const $editor = document.createElement("div");
-  $editor.className = "Editor";
+  $editor.className = "editor";
   $target.appendChild($editor);
 
   let isInitialize = false;

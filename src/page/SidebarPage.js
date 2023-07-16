@@ -3,6 +3,7 @@ import { getApi } from "../utils/api.js";
 
 export default function SidebarPage({ $target, username }) {
   const $page = document.createElement("div");
+  $target.appendChild($page);
 
   const documentList = new DocumentList({
     $target: $page,
@@ -13,10 +14,5 @@ export default function SidebarPage({ $target, username }) {
   this.setState = async () => {
     const document = await getApi(username);
     documentList.setState(document);
-    this.render();
-  };
-
-  this.render = () => {
-    $target.appendChild($page);
   };
 }

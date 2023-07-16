@@ -1,6 +1,6 @@
 import App from "./App.js";
 
+const username = "Haya";
 const $app = document.querySelector("#app");
-const userName = "Haya";
 
-new App({ $target: $app, username: userName });
+new App({ $target: $app, username });

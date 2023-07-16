@@ -1,15 +1,14 @@
-import { pushRouter } from "../../utils/router.js";
-import { listMaker } from "./DocumentListMaker.js";
-import { deleteApi } from "../../utils/api.js";
-import { pushNewPost } from "../../utils/btnCustomEvent.js";
+import { DocumentListRenderer } from "./DocumentListRenderer.js";
+import { onClickBtn, onClickDocument, onClickHeader } from "./handlerEvent.js";
 
 export default function DocumentList({ $target, initialState, username }) {
   const $header = document.createElement("header");
   const $documentList = document.createElement("div");
   const $addDocumentBtn = document.createElement("button");
+  const $ul = document.createElement("ul");
   $header.innerHTML = `<h3><span style="font-size: 30px;">${username}</span>의 노션 페이지</h3>`;
-  $addDocumentBtn.textContent = "+ Add a Page";
   $header.className = "header";
+  $addDocumentBtn.textContent = "+ Add a Page";
   $addDocumentBtn.className = "addDocumentBtn";
 
   $target.appendChild($header);
@@ -19,85 +18,28 @@ export default function DocumentList({ $target, initialState, username }) {
   this.state = initialState;
 
   this.setState = (nextState) => {
-    this.state = nextState;
-    this.render();
+    if (JSON.stringify(this.state) !== JSON.stringify(nextState)) {
+      this.state = nextState;
+      this.render();
+    }
   };
 
   this.render = () => {
-    const $ul = document.createElement("ul");
-    this.state.map((item) => $ul.appendChild(listMaker(item)));
+    $ul.innerHTML = "";
+    this.state.map((item) => $ul.appendChild(DocumentListRenderer(item)));
     $documentList.appendChild($ul);
   };
 
   this.render();
 
-  $target.addEventListener("click", async (e) => {
+  $target.addEventListener("click", (e) => {
     const { target } = e;
-    const $li = target.closest("li");
-    if ($li) {
-      const { id } = $li.dataset;
-      $documentList.innerHTML = "";
-      pushRouter(`/${id}`);
-    }
 
-    if (target.tagName === "H3") {
-      $documentList.innerHTML = "";
-      pushRouter("/");
-    }
-
-    if (target.tagName === "BUTTON") {
-      const { id } = target.dataset;
-      if (target.className === "add") {
-        pushNewPost(id);
-      }
-      if (target.className === "delete") {
-        let findChildDocument = [];
-        // 삭제할 document의 child document를 검색해서 가져오기
-        const getChildDocuments = (items, id) => {
-          items.forEach((item) => {
-            if (item.id === parseInt(id)) {
-              findChildDocument = item.documents;
-              return item.documents;
-            } else if (item.documents.length > 0) {
-              getChildDocuments(item.documents, id);
-            }
-          });
-          return;
-        };
-        getChildDocuments(this.state, id);
-
-        if (findChildDocument.length > 0) {
-          if (confirm("하위 문서도 모두 지우시겠습니까?")) {
-            const deleteAllChildDocument = (documents) => {
-              documents.forEach(async (childDocument) => {
-                if (childDocument.documents.length > 0) {
-                  deleteAllChildDocument(childDocument.documents);
-                }
-                await deleteApi(username, childDocument.id);
-              });
-            };
-            deleteAllChildDocument(findChildDocument);
-            await deleteApi(username, id).then((res) => {
-              $documentList.innerHTML = "";
-              res.parent === null || res.parent === {}
-                ? pushRouter("/")
-                : pushRouter(`/${res.parent.id}`);
-            });
-          }
-        } else {
-          await deleteApi(username, id).then((res) => {
-            $documentList.innerHTML = "";
-            res.parent === null || res.parent === {}
-              ? pushRouter("/")
-              : pushRouter(`/${res.parent.id}`);
-          });
-        }
-      }
-      if (target.className === "addDocumentBtn") {
-        $documentList.innerHTML = "";
-        pushNewPost();
-        pushRouter(`/`);
-      }
-    }
+    // 이동할 document 클릭 시
+    onClickDocument(target);
+    // header 클릭 시, root로 이동
+    onClickHeader(target);
+    // 각 button에 해당하는 이벤트
+    onClickBtn(target, this.state, username);
   });
 }

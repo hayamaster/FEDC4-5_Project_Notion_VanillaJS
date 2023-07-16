@@ -5,6 +5,7 @@ export const initRouter = (onRoute) => {
     const { nextUrl } = e.detail;
 
     if (nextUrl) {
+      window.addEventListener("popstate", () => onRoute());
       history.pushState(null, null, nextUrl);
       onRoute();
     }

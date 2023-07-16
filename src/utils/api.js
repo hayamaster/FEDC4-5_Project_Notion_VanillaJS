@@ -1,75 +1,53 @@
-export const API_END_POINT = "https://kdt-frontend.programmers.co.kr/documents";
+export const API_END_POINT = "https://kdt-frontend.programmers.co.kr";
 
-export const getApi = async (username, id = "") => {
+const request = async (url, options = {}) => {
   try {
-    const res = await fetch(`${API_END_POINT}/${id}`, {
-      headers: {
-        "x-username": username,
-        "Content-Type": "application/json",
-      },
+    const res = await fetch(`${API_END_POINT}${url}`, {
+      ...options,
     });
 
-    if (res.ok) return await res.json();
-    throw new Error("API GET 처리 중 무엇인가 이상합니당!");
+    if (res.ok) return res.json();
+    throw new Error("API 처리 중 오류가 발생하였습니다!");
   } catch (e) {
-    alert(e.message);
+    console.error(e);
   }
 };
 
-export const postApi = async (username, id = null) => {
-  try {
-    const res = await fetch(`${API_END_POINT}`, {
-      headers: {
-        "x-username": username,
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        title: "새 문서",
-        parent: id,
-      }),
-    });
-
-    if (res.ok) return await res.json();
-    throw new Error("API POST 처리 중 무엇인가 이상합니당~");
-  } catch (e) {
-    alert(e.message);
-  }
+const headers = (username) => {
+  return { "x-username": username, "Content-Type": "application/json" };
 };
 
-export const putApi = async (username, id, title, content) => {
-  try {
-    const res = await fetch(`${API_END_POINT}/${id}`, {
-      headers: {
-        "x-username": username,
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-      body: JSON.stringify({
-        title: title,
-        content: content,
-      }),
-    });
-
-    if (res.ok) return await res.json();
-    throw new Error("API PUT 처리 중 무엇인가 이상하다고요!");
-  } catch (e) {
-    alert(e.message);
-  }
+export const getApi = (username, id = "") => {
+  return request(`/documents/${id}`, {
+    headers: headers(username),
+  });
 };
 
-export const deleteApi = async (username, id) => {
-  try {
-    const res = await fetch(`${API_END_POINT}/${id}`, {
-      headers: {
-        "x-username": username,
-      },
-      method: "DELETE",
-    });
+export const postApi = (username, id = null) => {
+  return request(`/documents`, {
+    headers: headers(username),
+    method: "POST",
+    body: JSON.stringify({
+      title: "새 문서",
+      parent: id,
+    }),
+  });
+};
 
-    if (res.ok) return await res.json();
-    throw new Error("API DELETE 처리 중 무엇인가 이상하다고 좀!");
-  } catch (e) {
-    alert(e.message);
-  }
+export const putApi = (username, id, title, content) => {
+  return request(`/documents/${id}`, {
+    headers: headers(username),
+    method: "PUT",
+    body: JSON.stringify({
+      title,
+      content,
+    }),
+  });
+};
+
+export const deleteApi = (username, id) => {
+  return request(`/documents/${id}`, {
+    headers: headers(username),
+    method: "DELETE",
+  });
 };
