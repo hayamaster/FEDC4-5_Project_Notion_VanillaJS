@@ -97,7 +97,11 @@ div {
   font-size: medium;
   background-color: #faf3dd;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+}
+.toggleBtn:hover {
+  background-color: #dbdbdb;
 }
 .add,
 .delete {

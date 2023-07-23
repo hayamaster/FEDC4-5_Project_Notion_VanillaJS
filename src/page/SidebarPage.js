@@ -9,10 +9,12 @@ export default function SidebarPage({ $target, username }) {
     $target: $page,
     initialState: [],
     username,
+    isToggled: false,
   });
 
   this.setState = async () => {
     const document = await getApi(username);
+    document.forEach((item) => (item["isToggled"] = false));
     documentList.setState(document);
   };
 }

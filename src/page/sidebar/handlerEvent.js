@@ -3,24 +3,25 @@ import {
   addChildDocument,
   deleteDocument,
   addNewDocument,
+  toggleChildDocument,
 } from "../../utils/btnEvent.js";
 
-export const onClickDocument = (target) => {
+export const onClickDocument = async (target) => {
   const $li = target.closest("li");
   if ($li) {
     const { id } = $li.dataset;
-    pushRouter(`/documents/${id}`);
+    await pushRouter(`/documents/${id}`);
   }
 };
 
-export const onClickHeader = (target) => {
+export const onClickHeader = async (target) => {
   const $header = target.closest(".header");
   if ($header) {
-    pushRouter("/");
+    await pushRouter("/");
   }
 };
 
-export const onClickBtn = async (target, state, username) => {
+export const onClickBtn = (target, state, username) => {
   if (target.tagName === "BUTTON") {
     switch (target.className) {
       case "addChild":
@@ -31,6 +32,9 @@ export const onClickBtn = async (target, state, username) => {
         break;
       case "addDocumentBtn":
         addNewDocument();
+        break;
+      case "toggleBtn":
+        toggleChildDocument(target);
         break;
       default:
     }

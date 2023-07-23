@@ -7,6 +7,24 @@ export const addChildDocument = (target) => {
   pushNewPost(id);
 };
 
+export const toggleChildDocument = (target) => {
+  const { id } = target.dataset;
+  const childDocuments = document.getElementById(id);
+  if (childDocuments === null) return;
+
+  childDocuments.getAttribute("data-isToggled") == "true"
+    ? childDocuments.setAttribute("data-isToggled", false)
+    : childDocuments.setAttribute("data-isToggled", true);
+
+  if (childDocuments.getAttribute("data-isToggled") == "true") {
+    childDocuments.style.display = "block";
+    target.innerText = "▼";
+  } else {
+    childDocuments.style.display = "none";
+    target.innerText = "▶︎";
+  }
+};
+
 export const deleteDocument = async (target, state, username) => {
   const { id } = target.dataset;
   const childDocument = findChildDocument(state, id);
