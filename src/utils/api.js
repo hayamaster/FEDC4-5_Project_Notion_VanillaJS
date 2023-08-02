@@ -6,7 +6,7 @@ const request = async (url, options = {}) => {
       ...options,
     });
 
-    if (res.ok) return res.json();
+    if (res.ok) return await res.json();
     throw new Error("API 처리 중 오류가 발생하였습니다!");
   } catch (e) {
     console.error(e);
@@ -17,14 +17,14 @@ const headers = (username) => {
   return { "x-username": username, "Content-Type": "application/json" };
 };
 
-export const getApi = (username, id = "") => {
-  return request(`/documents/${id}`, {
+export const getApi = async (username, id = "") => {
+  return await request(`/documents/${id}`, {
     headers: headers(username),
   });
 };
 
-export const postApi = (username, id = null) => {
-  return request(`/documents`, {
+export const postApi = async (username, id = null) => {
+  return await request(`/documents`, {
     headers: headers(username),
     method: "POST",
     body: JSON.stringify({
@@ -34,8 +34,8 @@ export const postApi = (username, id = null) => {
   });
 };
 
-export const putApi = (username, id, title, content) => {
-  return request(`/documents/${id}`, {
+export const putApi = async (username, id, title, content) => {
+  return await request(`/documents/${id}`, {
     headers: headers(username),
     method: "PUT",
     body: JSON.stringify({
@@ -45,8 +45,8 @@ export const putApi = (username, id, title, content) => {
   });
 };
 
-export const deleteApi = (username, id) => {
-  return request(`/documents/${id}`, {
+export const deleteApi = async (username, id) => {
+  return await request(`/documents/${id}`, {
     headers: headers(username),
     method: "DELETE",
   });

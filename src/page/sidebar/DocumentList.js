@@ -16,21 +16,23 @@ export default function DocumentList({ $target, initialState, username }) {
   $target.appendChild($addDocumentBtn);
 
   this.state = initialState;
+  let isInitial = false;
 
   this.setState = (nextState) => {
     if (JSON.stringify(this.state) !== JSON.stringify(nextState)) {
       this.state = nextState;
-      this.render();
+
+      if (!isInitial) {
+        isInitial = true;
+        this.initialRender();
+      }
     }
   };
 
-  this.render = () => {
-    $ul.innerHTML = "";
+  this.initialRender = () => {
     this.state.map((item) => $ul.appendChild(DocumentListRenderer(item)));
     $documentList.appendChild($ul);
   };
-
-  this.render();
 
   $target.addEventListener("click", (e) => {
     const { target } = e;

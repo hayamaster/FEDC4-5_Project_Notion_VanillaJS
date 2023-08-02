@@ -14,7 +14,6 @@ export default function SidebarPage({ $target, username }) {
 
   this.setState = async () => {
     const document = await getApi(username);
-    document.forEach((item) => (item["isToggled"] = false));
     documentList.setState(document);
   };
 }
