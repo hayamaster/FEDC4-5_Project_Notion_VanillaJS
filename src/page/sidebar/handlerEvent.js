@@ -6,11 +6,11 @@ import {
   toggleChildDocument,
 } from "../../utils/btnEvent.js";
 
-export const onClickDocument = async (target) => {
+export const onClickDocument = (target) => {
   const $li = target.closest("li");
   if ($li) {
     const { id } = $li.dataset;
-    await pushRouter(`/documents/${id}`);
+    pushRouter(`/documents/${id}`);
   }
 };
 
@@ -21,14 +21,14 @@ export const onClickHeader = async (target) => {
   }
 };
 
-export const onClickBtn = (target, state, username) => {
+export const onClickBtn = async (target, state, username) => {
   if (target.tagName === "BUTTON") {
     switch (target.className) {
       case "addChild":
-        addChildDocument(target);
+        await addChildDocument(target);
         break;
       case "delete":
-        deleteDocument(target, state, username);
+        await deleteDocument(target, state, username);
         break;
       case "addDocumentBtn":
         addNewDocument();

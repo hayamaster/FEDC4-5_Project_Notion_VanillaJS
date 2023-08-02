@@ -37,10 +37,10 @@ export default function DocumentList({ $target, initialState, username }) {
   $target.addEventListener("click", (e) => {
     const { target } = e;
 
-    // 이동할 document 클릭 시
-    onClickDocument(target);
     // header 클릭 시, root로 이동
     onClickHeader(target);
+    // 이동할 document 클릭시
+    onClickDocument(target);
     // 각 button에 해당하는 이벤트
     onClickBtn(target, this.state, username);
   });

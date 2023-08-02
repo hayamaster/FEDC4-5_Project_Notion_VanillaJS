@@ -2,9 +2,9 @@ import { pushRouter } from "./router.js";
 import { pushNewPost } from "./btnCustomEvent.js";
 import { deleteApi } from "./api.js";
 
-export const addChildDocument = (target) => {
+export const addChildDocument = async (target) => {
   const { id } = target.dataset;
-  pushNewPost(id);
+  await pushNewPost(id);
 };
 
 export const toggleChildDocument = (target) => {
@@ -13,13 +13,9 @@ export const toggleChildDocument = (target) => {
 
   if (childDocuments === null) return;
 
-  if (childDocuments.getAttribute("data-isToggled") == "true") {
-    childDocuments.setAttribute("data-isToggled", false);
-    target.setAttribute("data-isToggled", false);
-  } else {
-    childDocuments.setAttribute("data-isToggled", true);
-    target.setAttribute("data-isToggled", true);
-  }
+  const isToggled = JSON.parse(childDocuments.getAttribute("data-isToggled"));
+  childDocuments.setAttribute("data-isToggled", !isToggled);
+  target.setAttribute("data-isToggled", !isToggled);
 
   if (childDocuments.getAttribute("data-isToggled") == "true") {
     childDocuments.style.display = "block";
