@@ -9,6 +9,7 @@ export default function SidebarPage({ $target, username }) {
     $target: $page,
     initialState: [],
     username,
+    isToggled: false,
   });
 
   this.setState = async () => {

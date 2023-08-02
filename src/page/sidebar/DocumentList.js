@@ -16,29 +16,31 @@ export default function DocumentList({ $target, initialState, username }) {
   $target.appendChild($addDocumentBtn);
 
   this.state = initialState;
+  let isInitial = false;
 
   this.setState = (nextState) => {
     if (JSON.stringify(this.state) !== JSON.stringify(nextState)) {
       this.state = nextState;
-      this.render();
+
+      if (!isInitial) {
+        isInitial = true;
+        this.initialRender();
+      }
     }
   };
 
-  this.render = () => {
-    $ul.innerHTML = "";
+  this.initialRender = () => {
     this.state.map((item) => $ul.appendChild(DocumentListRenderer(item)));
     $documentList.appendChild($ul);
   };
 
-  this.render();
-
   $target.addEventListener("click", (e) => {
     const { target } = e;
 
-    // 이동할 document 클릭 시
-    onClickDocument(target);
     // header 클릭 시, root로 이동
     onClickHeader(target);
+    // 이동할 document 클릭시
+    onClickDocument(target);
     // 각 button에 해당하는 이벤트
     onClickBtn(target, this.state, username);
   });

@@ -2,6 +2,11 @@ import Editor from "./editor/Editor.js";
 import { setItem, removeItem } from "../utils/storage.js";
 import { getApi, postApi, putApi } from "../utils/api.js";
 import { makeNewPost } from "../utils/btnCustomEvent.js";
+import {
+  DocumentListRenderer,
+  addChildrenUl,
+} from "./sidebar/DocumentListRenderer.js";
+import { toggleChildDocument } from "../utils/btnEvent.js";
 
 export default function PostEditPage({ $target, initialState, username }) {
   this.state = initialState;
@@ -29,12 +34,12 @@ export default function PostEditPage({ $target, initialState, username }) {
     },
   });
 
-  this.setState = (nextState) => {
+  this.setState = async (nextState) => {
     const { id } = nextState;
     if (nextState.id === "root") {
       rootState();
     } else if (this.state.id !== id) {
-      documentChangeState(id);
+      await documentChangeState(id);
     } else {
       this.state = {
         ...this.state,
@@ -55,7 +60,7 @@ export default function PostEditPage({ $target, initialState, username }) {
     postLocalSaveKey = `temp-post-${id}`;
     const post = await getApi(username, id);
     this.state = {
-      id: id,
+      id,
       post,
     };
     editor.setState(this.state.post);
@@ -65,9 +70,40 @@ export default function PostEditPage({ $target, initialState, username }) {
     const createdPost = await postApi(username, id);
     history.replaceState(null, null, `/documents/${createdPost.id}`); // url을 new에서 생성된 id로 바꾸기
     removeItem(postLocalSaveKey); // local storage에서 temp-document-new 지우기
-    this.setState({
+
+    await this.setState({
       id: createdPost.id,
     });
+
+    const childDocument = { ...this.state.post };
+
+    // root에서 document 추가 시
+    if (id === undefined) {
+      const $rootUl = document.querySelector("ul");
+      $rootUl.appendChild(DocumentListRenderer(childDocument));
+      return;
+    }
+
+    await this.setState({ id });
+    const post = this.state.post;
+
+    // document 추가 시, 부모가 자식을 가지고 있지 않을 때, 자식들을 담을 ul 추가.
+    if (post.documents.length === 1) {
+      const $parentDiv = document.getElementById(`div-${id}`);
+      addChildrenUl($parentDiv, post, $parentDiv.dataset.depth);
+    }
+
+    // 부모 ul에 자식 div를 추가
+    const $parentUl = document.getElementById(`ul-${id}`);
+    $parentUl.appendChild(
+      DocumentListRenderer(childDocument, parseInt($parentUl.dataset.depth) + 1)
+    );
+
+    // 토글 버튼이 닫혀 있으면 열기.
+    const $parentToggleBtn = document.getElementById(`toggleBtn-${id}`);
+    if ($parentToggleBtn.getAttribute("data-isToggled") == "false") {
+      toggleChildDocument($parentToggleBtn);
+    }
   };
-  makeNewPost((id) => newPost(id));
+  makeNewPost(async (id) => await newPost(id));
 }
