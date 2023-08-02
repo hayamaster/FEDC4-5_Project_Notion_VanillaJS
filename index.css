@@ -103,10 +103,17 @@ div {
 .toggleBtn:hover {
   background-color: #dbdbdb;
 }
-.add,
+.addChild,
 .delete {
+  background-color: #faf3dd;
   cursor: pointer;
   margin-left: 10px;
-  font-size: medium;
+  font-size: large;
   border: none;
+  border-radius: 10px;
+  width: 2rem;
+}
+.addChild:hover,
+.delete:hover {
+  background-color: gray;
 }

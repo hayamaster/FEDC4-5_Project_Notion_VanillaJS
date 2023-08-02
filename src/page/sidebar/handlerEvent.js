@@ -14,10 +14,10 @@ export const onClickDocument = (target) => {
   }
 };
 
-export const onClickHeader = async (target) => {
+export const onClickHeader = (target) => {
   const $header = target.closest(".header");
   if ($header) {
-    await pushRouter("/");
+    pushRouter("/");
   }
 };
 
@@ -25,7 +25,7 @@ export const onClickBtn = async (target, state, username) => {
   if (target.tagName === "BUTTON") {
     switch (target.className) {
       case "addChild":
-        await addChildDocument(target);
+        addChildDocument(target);
         break;
       case "delete":
         await deleteDocument(target, state, username);
