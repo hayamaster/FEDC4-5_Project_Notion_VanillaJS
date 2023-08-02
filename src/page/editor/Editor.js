@@ -32,6 +32,17 @@ export default function Editor({
         `;
       isInitialize = true;
     }
+
+    const $sidebarTitle = document.getElementById(`span-${this.state.id}`);
+    if ($sidebarTitle === null) return;
+
+    $sidebarTitle.innerText = this.state.title ? this.state.title : "제목 없음";
+
+    if (this.state.title === "") {
+      const editorTitle = document.querySelector("input");
+      this.state.title = "제목 없음";
+      editorTitle.placeholder = "제목 없음";
+    }
   };
 
   this.render();
