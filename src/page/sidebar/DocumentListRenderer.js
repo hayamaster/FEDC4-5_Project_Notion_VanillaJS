@@ -45,7 +45,7 @@ const listRendererTemplate = (item, depth) => {
   return `
     <li data-id="${id}" style="padding-left: ${depth}px;">
         <button id="toggleBtn-${id}" data-id="${id}" data-isToggled="false" class="toggleBtn">▶︎</button>
-        <span data-id="${id}" class="documentTitle">${title}</span>
+        <span id="span-${id}" data-id="${id}" class="documentTitle">${title}</span>
         <button data-id="${id}" class="addChild">+</button>
         <button data-id="${id}" class="delete">-</button>
     </li>

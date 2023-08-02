@@ -2,9 +2,9 @@ import { pushRouter } from "./router.js";
 import { pushNewPost } from "./btnCustomEvent.js";
 import { deleteApi } from "./api.js";
 
-export const addChildDocument = async (target) => {
+export const addChildDocument = (target) => {
   const { id } = target.dataset;
-  await pushNewPost(id);
+  pushNewPost(id);
 };
 
 export const toggleChildDocument = (target) => {
